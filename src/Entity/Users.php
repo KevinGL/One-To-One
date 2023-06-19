@@ -10,11 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Trait\CreatedAtTrait;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Adresse email déjà utilisée')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use CreatedAtTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -59,8 +62,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeImmutable $created_at = null;
+    /*#[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $created_at = null;*/
 
     #[ORM\Column(length: 5)]
     private ?string $postal = null;
@@ -71,11 +74,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => false])]
     private ?bool $is_admin = null;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Photos::class)]
-    private Collection $photos;
-
     #[ORM\Column(length: 255)]
     private ?string $search = null;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Photos::class, orphanRemoval: true)]
+    private Collection $photos;
 
     public function __construct()
     {
@@ -262,7 +265,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    /*public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
@@ -272,7 +275,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->created_at = $created_at;
 
         return $this;
-    }
+    }*/
 
     public function getPostal(): ?string
     {
@@ -298,7 +301,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isIsAdmin(): ?bool
+    public function getIsAdmin(): ?bool
     {
         return $this->is_admin;
     }
@@ -306,6 +309,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsAdmin(bool $is_admin): self
     {
         $this->is_admin = $is_admin;
+
+        return $this;
+    }
+
+    public function getSearch(): ?string
+    {
+        return $this->search;
+    }
+
+    public function setSearch(string $search): self
+    {
+        $this->search = $search;
 
         return $this;
     }
@@ -336,18 +351,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $photo->setUserId(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSearch(): ?string
-    {
-        return $this->search;
-    }
-
-    public function setSearch(string $search): self
-    {
-        $this->search = $search;
 
         return $this;
     }

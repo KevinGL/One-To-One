@@ -18,7 +18,7 @@ class Photos
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user_id = null;
+    private ?Users $user = null;
 
     public function getId(): ?int
     {
@@ -37,14 +37,14 @@ class Photos
         return $this;
     }
 
-    public function getUserId(): ?users
+    public function getUserId(): ?Users
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?users $user_id): self
+    public function setUserId(?Users $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

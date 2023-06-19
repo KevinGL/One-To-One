@@ -3,34 +3,32 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    
-    <form method="post">
-        <fieldset>
-        
-            <legend>Bienvenue sur One To One</legend>
-            
-            <div class="form-group">
-                <label for="exampleInputEmail1" class="form-label mt-4">Nom d'utilisateur</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrez votre nom d'utilisateur" />
-            </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">email</th>
+                <th scope="col">username</th>
+                <th scope="col">gender</th>
+                <th scope="col">search</th>
+                <th scope="col">birthdate</th>
+                <th scope="col">Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr class="table-active">
+                    <th scope="row">{{ user.id }}</th>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.gender }}</td>
+                    <td>{{ user.search }}</td>
+                    <td>{{ user.birthdate | date("d/m/Y") }}</td>
+                    <td>{{ user.isAdmin | default("N/A") }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-            <div class="form-group">
-                <label for="exampleInputPassword1" class="form-label mt-4">Mot de passe</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Mot de passe" />
-            </div>
-
-            <br>
-            
-            <button type="submit" class="btn btn-primary">Je me connecte !</button>
-            
-        </fieldset>
-    </form>
-    
-</div>
 {% endblock %}

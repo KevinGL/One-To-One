@@ -41,6 +41,13 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_logout') }}">Me déconnecter</a>
 					</li>
+
+					{% if app.user.isAdmin %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('users') }}">Liste des users</a>
+						</li>
+					{% endif %}
+
 				{% else %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_login') }}">Me connecter</a>
